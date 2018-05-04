@@ -9,3 +9,19 @@ a {
 div{
   border: solid 1px black;
 }
+
+.thumbnail{
+  padding: 0px;
+  
+}
+.thumbnail img{
+  /* overflow: hidden; */
+  max-width: 100%;
+  
+}
+
+iframe, #player{
+  width: 100%;
+  margin: 0;
+  padding: 0
+}

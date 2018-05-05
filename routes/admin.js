@@ -61,11 +61,7 @@ router.get('/update/:id', function(req, res, next){
         movie: Movie
       })
     })
-  }
-  else{
-    res.redirect('/') // 不知道这样可不可以
-  }
-  
+  }  
 })
 
 router.get('/form', function(req, res, next){
@@ -97,13 +93,13 @@ router.post('/movie/new', function(req, res, next){
         res.render('error')
         return
       }
-      _movie = _.extend(movie, movieObj)
+      _movie = _.extend(Movie, movieObj)
       _movie.save(function(err, movie){
         if(err){
           res.render('error')
           return
         }
-        res.redirect('/movie'+movie._id)
+        res.redirect('/movie/'+movie._id)
       })
     })
   }

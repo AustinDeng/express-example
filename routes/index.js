@@ -73,7 +73,7 @@ router.get('/', function(req, res, next) {
 router.get('/movie/:id', function(req, res, next){
   // res.render('detail', dataDetail)
   var id = req.params.id
-  movie.findById(function(err, Movie){
+  movie.findById(id, function(err, Movie){
     if(err){
       res.render('error')
       return

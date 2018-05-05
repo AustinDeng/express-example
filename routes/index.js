@@ -1,5 +1,6 @@
 var express = require('express')
 var router = express.Router()
+var movie = require('../modules/movies')
 
 var dataIndex = {
   title: '电影首页',
@@ -57,11 +58,31 @@ var dataDetail = {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', dataIndex)
+  movie.fetch(function(err, movies){
+    if(err){
+      res.render('error')
+      return
+    }
+    res.render('index', {
+      title: '电影首页',
+      movies: movies
+    })
+  })
 })
 
 router.get('/movie/:id', function(req, res, next){
-  res.render('detail', dataDetail)
+  // res.render('detail', dataDetail)
+  var id = req.params.id
+  movie.findById(function(err, Movie){
+    if(err){
+      res.render('error')
+      return
+    }
+    res.render('detail', {
+      title: '电影详情页',
+      movie: Movie
+    })
+  })
 })
 
 module.exports = router

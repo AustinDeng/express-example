@@ -8,6 +8,17 @@ var bodyParser = require('body-parser')
 var index = require('./routes/index')
 var admin = require('./routes/admin')
 
+var mongoose = require('mongoose')
+
+mongoose.connect('mongodb://admin:123456@127.0.0.1:27017/admin')
+  .then(() => {
+    console.log("Mongodb connection successful!")
+  })
+  .catch((err) => {
+    console.error( `App starting error: ${ err.stack}`)
+    process.exit(1)
+  })
+
 var app = express()
 
 // view engine setup
@@ -24,14 +35,24 @@ app.use(cookieParser())
 // 设置资源文件目录
 app.use(express.static(path.join(__dirname, 'public')))
 
+// function miss(res, eerr){
+//   res.render('error', {
+//     title: '出现错误',
+//     err: err
+//   })
+// }
+
 app.use('/', index)
 app.use('/admin', admin)
 
 /* 
   / 首页
-  /admin/movie 后台管理页
-  /admin/form 后台上传页
+  /admin/movie 后台管理页 list
+  /admin/form 后台上传页 
+  /admin/update/:id 后台更新页
+  /admin/movie/new 后台提交页
   /movie/:id 电影详情页
+
 */
 
 // catch 404 and forward to error handler
@@ -49,7 +70,10 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500)
-  res.render('error')
+  res.render('error',{
+    title: '出现错误',
+    err: err
+  })
 })
 
 module.exports = app

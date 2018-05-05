@@ -10,8 +10,8 @@ block content
             th 导演
             th 国家
             th 上映年份
-            //- th 录入时间
-            //- th 更新时间
+            th 录入时间
+            th 更新时间
             th 查看
             th 修改
             th 删除
@@ -22,8 +22,8 @@ block content
               td #{ item.director }
               td #{ item.country }
               td #{ item.year }
-              //- td #{ moment(item.meta.creatAt).format('YYYY-MM-DD HH:mm')}
-              //- td #{ moment(item.meta.updateAt).format('YYY-MM-DD HH:mm')}
+              td #{ moment(item.meta.creatAt).format('YYYY-MM-DD HH:mm')}
+              td #{ moment(item.meta.updateAt).format('YYY-MM-DD HH:mm')}
               td: a(target="_black", href="../../movie/#{item._id}")查看
               td: a(target="_black", href="#")修改
               td

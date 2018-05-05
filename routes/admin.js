@@ -86,11 +86,12 @@ router.get('/form', function(req, res, next){
 })
 
 router.post('/movie/new', function(req, res, next){
+  console.log(req.body)
   var id = req.body.movie._id
   var movieObj = req.body.movie
   var _movie
 
-  if(_id !== 'undefined'){
+  if(id !== ''){
     movie.findById(id, function(err, Movie){
       if(err){
         res.render('error')
@@ -122,7 +123,7 @@ router.post('/movie/new', function(req, res, next){
         res.render('error')
         return
       }
-      res.redirect('/movie'+movie._id)
+      res.redirect('/movie/' + movie._id)
     })
   }
 })

@@ -10,7 +10,8 @@ var admin = require('./routes/admin')
 
 var mongoose = require('mongoose')
 
-mongoose.connect('mongodb://admin:123456@127.0.0.1:27017/admin')
+mongoose.Promise = global.Promise
+mongoose.connect('mongodb://deng:123456@127.0.0.1:27017/admin')
   .then(() => {
     console.log("Mongodb connection successful!")
   })
@@ -29,7 +30,7 @@ app.set('view engine', 'jade')
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'))
 app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
 // 设置资源文件目录
@@ -72,7 +73,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500)
   res.render('error',{
     title: '出现错误',
-    err: err
+    error: err
   })
 })
 

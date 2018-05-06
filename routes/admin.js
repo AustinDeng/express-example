@@ -124,4 +124,19 @@ router.post('/movie/new', function(req, res, next){
   }
 })
 
+router.delete('/movie', function(req, res){
+  var id = req.query.id
+  if(id){
+    movie.remove({_id: id},function(err,Movie){
+      if(err){
+        console.log(err)
+        return
+      }
+      res.json({
+        success: 1
+      })
+    })
+  }
+})
+
 module.exports = router

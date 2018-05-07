@@ -46,7 +46,7 @@ app.locals.moment = require('moment') // 载入moment模块，格式化日期
 // }
 
 app.use('/', index)
-app.use('/admin', admin)
+app.use('/admin', admin) 
 
 /* 
   / 首页

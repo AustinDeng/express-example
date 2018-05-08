@@ -50,6 +50,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.locals.moment = require('moment') // 载入moment模块，格式化日期
 
+if('development' === app.get('env')){
+  app.set('showStackError', true)
+  app.locals.pretty = true
+  mongoose.set('debug', true)
+}
+
 // function miss(res, eerr){
 //   res.render('error', {
 //     title: '出现错误',

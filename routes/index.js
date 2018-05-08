@@ -3,9 +3,23 @@ var router = express.Router()
 var movie = require('../modules/movies')
 var User = require('../modules/user')
 
+// pre handle user
+
+router.get(function (req, res, next) {
+  var _user = req.session.user
+  if (_user) {
+    app.locals.user = _user
+  }
+  else{
+    return next()
+  }
+})
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
   console.log(req.session.user)
+
+
   movie.fetch(function (err, movies) {
     if (err) {
       res.render('error')
@@ -57,37 +71,42 @@ router.post('/user/signup', function (req, res, next) {
   })
 })
 
-router.post('/user/signin', function(req, res, next){
+router.post('/user/signin', function (req, res, next) {
   var _user = req.body.user
   var name = _user.name
   var password = _user.password
 
-  User.findOne({name: name}, function(err, user){
-    if(err){
+  User.findOne({ name: name }, function (err, user) {
+    if (err) {
       console.log(err)
     }
-    if(!user){
+    if (!user) {
       console.log("用户不存在！")
       res.redirect('/')
       return
     }
 
-    user.comparePassword(password, function(err, isMatch){
-      if(err){
+    user.comparePassword(password, function (err, isMatch) {
+      if (err) {
         console.log(err)
       }
-      if(isMatch){
+      if (isMatch) {
         console.log("Password is matched!")
         req.session.user = user
         res.redirect('/')
       }
-      else{
+      else {
         console.log("Password is not matched!")
         res.redirect('/')
       }
     })
+  })
+})
 
-  }) 
+router.get('/logout', function (req, res, next) {
+  delete req.session.user
+  delete app.locals.user
+  res.redirect('/')
 })
 
 module.exports = router

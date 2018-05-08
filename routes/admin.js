@@ -2,6 +2,7 @@ var express = require('express')
 var router = express.Router()
 var movie = require('../modules/movies')
 var _ = require('underscore')
+var User = require('../modules/user')
 
 var dataForm = {
   title: '后台表单提交页面',
@@ -44,6 +45,19 @@ router.get('/movie', function(req, res, next){
     res.render('admin', {
       title: '后台管理页面',
       movies: movies
+    })
+  })
+})
+
+router.get('/userlist', function(req, res, next){
+  // res.render('admin', dataAdmin)
+  User.fetch(function(err, users){
+    if(err){
+      res.render('error')
+    }
+    res.render('userlist', {
+      title: '后台用户管理页面',
+      users: users
     })
   })
 })

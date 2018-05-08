@@ -46,4 +46,29 @@ userSchemas.pre('save', function (next) {
   })
 })
 
+userSchemas.methods = {
+  comparePassword: function(_password, cb){
+    bcrypt.compare(_password, this.password, function(err, isMatch){
+      if(err){
+        return cb(err)
+      }
+      cb(null, isMatch)
+    })
+  }
+}
+
+userSchemas.statics = {
+	fetch:function(cb){
+		return this
+		  .find({})
+		  .sort('meta.updateAt')
+		  .exec(cb)
+	}
+	// findById:function(id,cb){
+	// 	return this
+	// 	  .findOne({_id:id})
+	// 	  .exec(cb)
+	// }
+}
+
 module.exports = userSchemas

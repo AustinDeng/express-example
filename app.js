@@ -4,14 +4,18 @@ var favicon = require('serve-favicon')
 var logger = require('morgan')
 var cookieParser = require('cookie-parser')
 var bodyParser = require('body-parser')
+var session = require('express-session')
 
 var index = require('./routes/index')
 var admin = require('./routes/admin')
 
 var mongoose = require('mongoose')
+var mongoStore = require('connect-mongo')(session)
+
+const DATABASE_URL = 'mongodb://deng:123456@127.0.0.1:27017/admin'
 
 mongoose.Promise = global.Promise
-mongoose.connect('mongodb://deng:123456@127.0.0.1:27017/admin')
+mongoose.connect(DATABASE_URL)
   .then(() => {
     console.log("Mongodb connection successful!")
   })
@@ -32,6 +36,14 @@ app.use(logger('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
+
+app.use(session({
+  secret: 'deng',
+  store: new mongoStore({
+    url: DATABASE_URL,
+    collection: 'sessions'
+  })
+}))
 
 // 设置资源文件目录
 app.use(express.static(path.join(__dirname, 'public')))

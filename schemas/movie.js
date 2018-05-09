@@ -31,14 +31,6 @@ movieSchemas.pre('save',function(next){
   next()
 })
 
-// movieSchemas.static('fetch', function(cb){
-//   return this.find({}).sort('meta.updateAt').exec(cb)
-// })
-
-// movieSchemas.static('findById', function(id, cb){
-//   return this.find({_id: id}).exec(cb)
-// })
-
 movieSchemas.statics = {
 	fetch:function(cb){
 		return this

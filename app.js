@@ -7,7 +7,7 @@ var bodyParser = require('body-parser')
 var session = require('express-session')
 
 var index = require('./routes/index')
-var admin = require('./routes/admin')
+
 
 var mongoose = require('mongoose')
 var mongoStore = require('connect-mongo')(session)
@@ -56,25 +56,10 @@ if('development' === app.get('env')){
   mongoose.set('debug', true)
 }
 
-// function miss(res, eerr){
-//   res.render('error', {
-//     title: '出现错误',
-//     err: err
-//   })
-// }
+// app.use('/', index)
+// app.use('/admin', admin) 
 
-app.use('/', index)
-app.use('/admin', admin) 
-
-/* 
-  / 首页
-  /admin/movie 后台管理页 list
-  /admin/form 后台上传页 
-  /admin/update/:id 后台更新页
-  /admin/movie/new 后台提交页
-  /movie/:id 电影详情页
-
-*/
+require('./routes/index')(app)
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -19,13 +19,15 @@ module.exports = function (app) {
   app.get('/', index.Index)  //电影首页
   app.get('/movie/:id', index.Delite)  // 电影详情页
   
+  app.get('/user/signup', user.showSignup)  // 用户注册页面
+  app.get('/user/signin', user.showSignin)  // 用户登录页面
   app.post('/user/signup', user.Signup)  // 用户注册表单提交页
   app.post('/user/signin', user.Signin)  // 用户登录表单提交
   
-  app.get('/admin/movie', admin.movie)  // 后台电影管理页
-  app.get('/admin/userlist', admin.userlist)  // 后台用户管理页
-  app.get('/admin/update/:id', admin.update)  // 电影信息更新页
-  app.get('/admin/form', admin.form)  // 电影上传表单页
-  app.post('/admin/movie/new', admin.new)  // 电影上传表单提交页
-  app.delete('/admin/movie', admin.delete)  // 后台电影删除页
+  app.get('/admin/movie/list', user.signinRequired, admin.adminRequired, admin.movie)  // 后台电影管理页
+  app.get('/admin/user/list', user.signinRequired, admin.adminRequired, admin.userlist)  // 后台用户管理页
+  app.get('/admin/movie/update/:id', user.signinRequired, admin.adminRequired, admin.update)  // 电影信息更新页
+  app.get('/admin/movie/form', user.signinRequired, admin.adminRequired, admin.form)  // 电影上传表单页
+  app.post('/admin/movie/new', user.signinRequired, admin.adminRequired, admin.new)  // 电影上传表单提交页
+  app.delete('/admin/movie/delete', user.signinRequired, admin.adminRequired, admin.delete)  // 后台电影删除页
 }

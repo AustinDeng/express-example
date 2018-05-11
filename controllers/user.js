@@ -1,6 +1,18 @@
 var User = require('../modules/user')
 var movie = require('../modules/movies')
 
+exports.showSignin = function (req, res, next){
+  res.render('signin', {
+    title: '登录页面'
+  })
+}
+
+exports.showSignup = function (req, res, next){
+  res.render('signup', {
+    title: '注册页面'
+  })
+}
+
 exports.Signup = function(req, res, next) {
   var _user = req.body.user
   User.findOne({ name: _user.name }, function (err, user) {
@@ -8,8 +20,8 @@ exports.Signup = function(req, res, next) {
       console.log(err)
     }
     if (user) {
-      console.log('用户存在')
-      res.redirect('/')
+      console.log('用户已经存在')
+      res.redirect('/user/signup')
     }
     else {
       var user = new User(_user)
@@ -18,7 +30,7 @@ exports.Signup = function(req, res, next) {
           console.log(err)
         }
         console.log(user)
-        res.redirect('/admin/userlist')
+        res.redirect('/')
       })
     }
   })
@@ -54,4 +66,13 @@ exports.Signin = function (req, res, next) {
       }
     })
   })
+}
+
+// 中间件
+exports.signinRequired = function(req, res, next){
+  var user = req.session.user
+  if(!user){
+    res.redirect('/user/signin')
+  }
+  next()
 }

@@ -116,3 +116,13 @@ exports.delete = function(req, res){
     })
   }
 }
+
+// 中间件
+exports.adminRequired = function(req, res, next){
+  var user = req.session.user
+  if( user.role < 10 ){
+    console.log("没有管理员权限")
+    res.redirect('/')
+  }
+  next()
+}

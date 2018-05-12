@@ -1,6 +1,7 @@
 var admin = require('../controllers/admin')
 var index = require('../controllers/index')
 var user = require('../controllers/user')
+var comment = require('../controllers/comment')
 
 module.exports = function (app) {
   // pre handle user
@@ -23,6 +24,7 @@ module.exports = function (app) {
   app.get('/user/signin', user.showSignin)  // 用户登录页面
   app.post('/user/signup', user.Signup)  // 用户注册表单提交页
   app.post('/user/signin', user.Signin)  // 用户登录表单提交
+  app.post('/user/comment', user.signinRequired, comment.save) // 用户评论表单提交
   
   app.get('/admin/movie/list', user.signinRequired, admin.adminRequired, admin.movie)  // 后台电影管理页
   app.get('/admin/user/list', user.signinRequired, admin.adminRequired, admin.userlist)  // 后台用户管理页

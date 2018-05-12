@@ -6,6 +6,7 @@ var commentSchemas = new Schemas({
   movie: {type: ObjectId, ref: 'movie'},
   from: {type: ObjectId, ref: 'user'},
   to: {type: ObjectId, ref: 'user'},
+  content: String,
   meta: {
     creatAt: {
       type: Date,

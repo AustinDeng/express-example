@@ -1,5 +1,6 @@
 var User = require('../modules/user')
 var movie = require('../modules/movies')
+var Comment = require('../modules/comment')
 
 exports.Index = function(req, res, next) {
   movie.fetch(function (err, movies) {
@@ -21,9 +22,12 @@ exports.Delite = function(req, res, next) {
       res.render('error')
       return
     }
-    res.render('detail', {
+    Comment.find({movie: id}, function(err, comments){
+      res.render('detail', {
       title: '电影详情页',
-      movie: Movie
+      movie: Movie,
+      comments: comments
+    })
     })
   })
 }

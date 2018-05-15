@@ -10,7 +10,7 @@ exports.save = function(req, res, next){
       console.log(err)
     }
 
-    res.redirect('/movie' + movieId)
+    res.redirect('/movie/' + movieId)
   })
   
 }

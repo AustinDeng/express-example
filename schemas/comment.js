@@ -5,7 +5,11 @@ var ObjectId = Schemas.Types.ObjectId
 var commentSchemas = new Schemas({
   movie: {type: ObjectId, ref: 'movie'},
   from: {type: ObjectId, ref: 'user'},
-  to: {type: ObjectId, ref: 'user'},
+  reply: [{
+    from: {type: ObjectId, ref: 'user'},
+    to: {type: ObjectId, ref: 'user'},
+    content: String
+  }],
   content: String,
   meta: {
     creatAt: {

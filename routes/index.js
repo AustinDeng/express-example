@@ -2,6 +2,7 @@ var admin = require('../controllers/admin')
 var index = require('../controllers/index')
 var user = require('../controllers/user')
 var comment = require('../controllers/comment')
+var catetory = require('../controllers/category')
 
 module.exports = function (app) {
   // pre handle user
@@ -32,4 +33,8 @@ module.exports = function (app) {
   app.get('/admin/movie/form', user.signinRequired, admin.adminRequired, admin.form)  // 电影上传表单页
   app.post('/admin/movie/new', user.signinRequired, admin.adminRequired, admin.new)  // 电影上传表单提交页
   app.delete('/admin/movie/delete', user.signinRequired, admin.adminRequired, admin.delete)  // 后台电影删除页
+
+  app.get('/admin/category/form', user.signinRequired, admin.adminRequired, catetory.categoryform)  // 分类上传表单页
+  app.post('/admin/category/new', user.signinRequired, admin.adminRequired, catetory.new)  // 分类上传表单提交页
+  app.get('/admin/category/list', user.signinRequired, admin.adminRequired, catetory.categorylist)  // 后台分类管理页
 }

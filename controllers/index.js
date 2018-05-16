@@ -1,18 +1,24 @@
 var User = require('../modules/user')
 var movie = require('../modules/movies')
 var Comment = require('../modules/comment')
+var Category = require('../modules/category')
 
 exports.Index = function (req, res, next) {
-  movie.fetch(function (err, movies) {
-    if (err) {
-      res.render('error')
-      return
+  Category
+    .find({})
+    .populate({ path: 'movies', option: { limit: 5 } })
+    .exec(function (err, categories) {
+      // movie.fetch(function (err, movies) {
+      if (err) {
+        res.render('error')
+        return
+      }
+      res.render('index', {
+        title: '电影首页',
+        categories: categories
+      })
     }
-    res.render('index', {
-      title: '电影首页',
-      movies: movies
-    })
-  })
+    )
 }
 
 exports.Delite = function (req, res, next) {

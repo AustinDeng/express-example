@@ -44,7 +44,7 @@ exports.update = function(req, res, next){
 
 exports.form = function(req, res, next){
   res.render('form', {
-    title: '后台表单提交页面',
+    title: '后台电影表单提交页面',
     movie: {
       _id: '',
       title: '',
@@ -60,7 +60,6 @@ exports.form = function(req, res, next){
 }
 
 exports.new =  function(req, res, next){
-  console.log(req.body)
   var id = req.body.movie._id
   var movieObj = req.body.movie
   var _movie

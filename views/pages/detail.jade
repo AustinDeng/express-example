@@ -30,14 +30,30 @@ block content
                   a.comment(href='#comments', data-cid="#{item._id}", data-tid="#{item.from._id}")
                     img.media-object(src="/images/avatar.jpg", style="width: 64px; height: 64px;")
                 .media-body
-                  h4.media-heading #{item.from.name}
+                  h4.media-heading #{item.from.name} 
                   p #{item.content}
-                hr
+                  if item.reply && item.reply.length>0
+                    each reply in item.reply
+                      .media
+                        .pull-left
+                          a.comment(href='#comments', data-cid="#{item._id}", data-tid="#{reply.from._id}")
+                            img.media-object(src="/images/avatar.jpg", style="width: 64px; height: 64px;")
+                        .media-body
+                          h4.media-heading 
+                          | #{reply.from.name}
+                          spam.text-info &nbsp;回复&nbsp;
+                          | #{reply.to.name}
+                          p #{reply.content}
+
           #comments
             form#commentForm(method="POST", action="/user/comment")
               input(type="hidden", name="comment[movie]", value="#{movie._id}")
-              input(type="hidden", name="comment[from]", value="#{user._id}")
+              if user
+                input(type="hidden", name="comment[from]", value="#{user._id}")
               .form-group
                 textarea.form-control(name="comment[content]", , rows="3")
-              button.btn.btn-primary(type="submit") 提交   
-script(src="/js/detail.js")
+              if user
+                button.btn.btn-primary(type="submit") 提交
+              else
+                a(href="/user/signin") 登录后评论   
+    script(src="/js/detail.js")

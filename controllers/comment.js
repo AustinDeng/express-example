@@ -7,7 +7,7 @@ exports.save = function (req, res, next) {
   if (_comment.cid) {
     Comment.findById(_comment.cid, function (err, comment) {
       var reply = {
-        from: _comment.cid,
+        from: _comment.from,
         to: _comment.tid,
         content: _comment.content
       }

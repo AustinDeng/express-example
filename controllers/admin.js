@@ -1,10 +1,11 @@
 var movie = require('../modules/movies')
 var _ = require('underscore')
+var Category = require('../modules/category')
 var User = require('../modules/user')
 
-exports.movie = function(req, res, next){
-  movie.fetch(function(err, movies){
-    if(err){
+exports.movie = function (req, res, next) {
+  movie.fetch(function (err, movies) {
+    if (err) {
       res.render('error')
     }
     res.render('admin', {
@@ -14,9 +15,9 @@ exports.movie = function(req, res, next){
   })
 }
 
-exports.userlist = function(req, res, next){
-  User.fetch(function(err, users){
-    if(err){
+exports.userlist = function (req, res, next) {
+  User.fetch(function (err, users) {
+    if (err) {
       res.render('error')
     }
     res.render('userlist', {
@@ -26,86 +27,107 @@ exports.userlist = function(req, res, next){
   })
 }
 
-exports.update = function(req, res, next){
+exports.update = function (req, res, next) {
   var id = req.params.id
-  if(id){
-    movie.findById(id, function(err, Movie){
-      if(err){
+  if (id) {
+    movie.findById(id, function (err, Movie) {
+      if (err) {
         res.render('error')
         return
       }
-      res.render('form', {
-        title: '后台表单更新页面',
-        movie: Movie
+      Category.find({}, function (err, categories) {
+        res.render('form', {
+          title: '后台表单更新页面',
+          movie: Movie,
+          categories: categories
+        })
       })
     })
-  }  
+  }
 }
 
-exports.form = function(req, res, next){
-  res.render('form', {
-    title: '后台电影表单提交页面',
-    movie: {
-      _id: '',
-      title: '',
-      director: '',
-      country: '',
-      year: '',
-      poster: '',
-      language: '',
-      flash: '',
-      summary:''
-  }
+exports.form = function (req, res, next) {
+  Category.find({}, function (err, categories) {
+    res.render('form', {
+      title: '后台电影表单提交页面',
+      categories: categories,
+      movie: {
+        _id: '',
+        title: '',
+        director: '',
+        country: '',
+        year: '',
+        poster: '',
+        language: '',
+        flash: '',
+        summary: ''
+      }
+    })
   })
 }
 
-exports.new =  function(req, res, next){
+exports.new = function (req, res, next) {
   var id = req.body.movie._id
   var movieObj = req.body.movie
   var _movie
 
-  if(id !== ''){
-    movie.findById(id, function(err, Movie){
-      if(err){
-        res.render('error')
-        return
+  if (id) {
+    movie.findById(id, function (err, Movie) {
+      if (err) {
+        console.log(err)
       }
       _movie = _.extend(Movie, movieObj)
-      _movie.save(function(err, movie){
-        if(err){
+      _movie.save(function (err, movie) {
+        if (err) {
           res.render('error')
           return
         }
-        res.redirect('/movie/'+movie._id)
+        res.redirect('/movie/' + movie._id)
       })
     })
   }
-  else{
-    _movie = new movie({
-      director: movieObj.director,
-      title: movieObj.title,
-      country: movieObj.country,
-      language: movieObj.language,
-      year: movieObj.year,
-      poster: movieObj.poster,
-      summary: movieObj.summary,
-      flash: movieObj.flash
-    })
-    _movie.save(function(err, movie){
-      if(err){
-        res.render('error')
-        return
+  else {
+    _movie = new movie(movieObj)
+
+    var categoryId = movieObj.category
+    var categoryName = movieObj.categoryName
+
+    _movie.save(function (err, movie) {
+      if (err) {
+        console.log(err)
       }
-      res.redirect('/movie/' + movie._id)
+
+      if (categoryId) {
+        Category.findById(categoryId, function (err, category) {
+          category.movies.push(movie._id)
+          category.save(function (err, category) {
+            res.redirect('/movie/' + movie._id)
+          })
+        })
+      }
+      else if(categoryName){
+        var category = new Category({
+          name: categoryName,
+          movies:[movie._id]
+        })
+
+        category.save(function(err, category){
+          movie.category = category._id
+          movie.save(function(err, movie){
+              res.redirect('/movie/' + movie._id)
+          }
+        )
+        })
+      }
     })
   }
 }
 
-exports.delete = function(req, res){
+exports.delete = function (req, res) {
   var id = req.query.id
-  if(id){
-    movie.remove({_id: id},function(err,Movie){
-      if(err){
+  if (id) {
+    movie.remove({ _id: id }, function (err, Movie) {
+      if (err) {
         console.log(err)
         return
       }
@@ -117,9 +139,9 @@ exports.delete = function(req, res){
 }
 
 // 中间件
-exports.adminRequired = function(req, res, next){
+exports.adminRequired = function (req, res, next) {
   var user = req.session.user
-  if( user.role < 10 ){
+  if (user.role < 10) {
     console.log("没有管理员权限")
     res.redirect('/')
   }

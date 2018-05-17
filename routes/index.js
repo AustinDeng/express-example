@@ -19,7 +19,8 @@ module.exports = function (app) {
   })
   
   app.get('/', index.Index)  //电影首页
-  app.get('/movie/:id', index.Delite)  // 电影详情页
+  app.get('/movie/:id', index.Delite)  // 电影详情页  
+  app.get('/results', index.Search)
   
   app.get('/user/signup', user.showSignup)  // 用户注册页面
   app.get('/user/signin', user.showSignin)  // 用户登录页面
@@ -37,4 +38,5 @@ module.exports = function (app) {
   app.get('/admin/category/form', user.signinRequired, admin.adminRequired, catetory.categoryform)  // 分类上传表单页
   app.post('/admin/category/new', user.signinRequired, admin.adminRequired, catetory.new)  // 分类上传表单提交页
   app.get('/admin/category/list', user.signinRequired, admin.adminRequired, catetory.categorylist)  // 后台分类管理页
+
 }

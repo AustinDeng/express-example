@@ -32,7 +32,7 @@ module.exports = function (app) {
   app.get('/admin/user/list', user.signinRequired, admin.adminRequired, admin.userlist)  // 后台用户管理页
   app.get('/admin/movie/update/:id', user.signinRequired, admin.adminRequired, admin.update)  // 电影信息更新页
   app.get('/admin/movie/form', user.signinRequired, admin.adminRequired, admin.form)  // 电影上传表单页
-  app.post('/admin/movie/new', user.signinRequired, admin.adminRequired, admin.new)  // 电影上传表单提交页
+  app.post('/admin/movie/new', user.signinRequired, admin.adminRequired, admin.savePoster,admin.new)  // 电影上传表单提交页
   app.delete('/admin/movie/delete', user.signinRequired, admin.adminRequired, admin.delete)  // 后台电影删除页
 
   app.get('/admin/category/form', user.signinRequired, admin.adminRequired, catetory.categoryform)  // 分类上传表单页

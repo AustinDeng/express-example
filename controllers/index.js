@@ -25,6 +25,13 @@ exports.Index = function (req, res, next) {
 
 exports.Delite = function (req, res, next) {
   var id = req.params.id
+
+  movie.update({_id: id}, {$inc:{pv:1}},function(err){
+    if(err){
+      console.log(err)
+    }
+  })
+  
   movie.findById(id, function (err, Movie) {
     if (err) {
       res.render('error')

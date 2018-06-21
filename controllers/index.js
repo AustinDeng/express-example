@@ -1,11 +1,12 @@
-var User = require('../modules/user')
+// var User = require('../modules/user')
 var movie = require('../modules/movies')
 var Comment = require('../modules/comment')
 var Category = require('../modules/category')
 
+// 分页
 var COUNT = 2
 
-exports.Index = function (req, res, next) {
+exports.Index = function (req, res) {
   Category
     .find({})
     .populate({ path: 'movies', option: { limit: 5 } })
@@ -23,7 +24,7 @@ exports.Index = function (req, res, next) {
     )
 }
 
-exports.Delite = function (req, res, next) {
+exports.Delite = function (req, res) {
   var id = req.params.id
 
   movie.update({_id: id}, {$inc:{pv:1}},function(err){
@@ -50,7 +51,7 @@ exports.Delite = function (req, res, next) {
   })
 }
 
-exports.Search = function (req, res, next) {
+exports.Search = function (req, res) {
   var cateId = req.query.cate
   var page = parseInt(req.query.p, 10) || 0
   var index = page * COUNT

@@ -1,19 +1,19 @@
 var User = require('../modules/user')
-var movie = require('../modules/movies')
+// var movie = require('../modules/movies')
 
-exports.showSignin = function (req, res, next){
+exports.showSignin = function (req, res){
   res.render('signin', {
     title: '登录页面'
   })
 }
 
-exports.showSignup = function (req, res, next){
+exports.showSignup = function (req, res){
   res.render('signup', {
     title: '注册页面'
   })
 }
 
-exports.Signup = function(req, res, next) {
+exports.Signup = function(req, res) {
   var _user = req.body.user
   User.findOne({ name: _user.name }, function (err, user) {
     if (err) {
@@ -24,7 +24,7 @@ exports.Signup = function(req, res, next) {
       res.redirect('/user/signup')
     }
     else {
-      var user = new User(_user)
+      // var user = new User(_user)
       user.save(function (err, user) {
         if (err) {
           console.log(err)
@@ -36,7 +36,7 @@ exports.Signup = function(req, res, next) {
   })
 }
 
-exports.Signin = function (req, res, next) {
+exports.Signin = function (req, res) {
   var _user = req.body.user
   var name = _user.name
   var password = _user.password
@@ -46,7 +46,7 @@ exports.Signin = function (req, res, next) {
       console.log(err)
     }
     if (!user) {
-      console.log("用户不存在！")
+      console.log('用户不存在！')
       res.redirect('/')
       return
     }
@@ -56,12 +56,12 @@ exports.Signin = function (req, res, next) {
         console.log(err)
       }
       if (isMatch) {
-        console.log("Password is matched!")
+        console.log('Password is matched!')
         req.session.user = user
         res.redirect('/')
       }
       else {
-        console.log("Password is not matched!")
+        console.log('Password is not matched!')
         res.redirect('/')
       }
     })

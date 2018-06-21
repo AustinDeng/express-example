@@ -5,30 +5,33 @@ var User = require('../modules/user')
 var fs = require('fs')
 var path = require('path')
 
-exports.savePoster = function(req, res, next){
+exports.savePoster = function (req, res, next) {
   var posterData = req.files.uploadPoster
   var filePath = posterData.path
   var originalFilename = posterData.originalFilename
 
-  if(originalFilename){
-    fs.readFile(filePath, function(err, data){
+  if (originalFilename) {
+    fs.readFile(filePath, function (err, data) {
       var timestamp = Date.now()
       var type = posterData.type.split('/')[1]
       var poster = timestamp + '.' + type
-      var newPath = path.join(__dirname,'../','/public/upload/' + poster)
+      var newPath = path.join(__dirname, '../', '/public/upload/' + poster)
 
-      fs.writeFile(newPath, data, function(err){
+      fs.writeFile(newPath, data, function (err) {
+        if (err) {
+          console.error(err)
+        }
         req.poster = poster
         next()
       })
     })
   }
-  else{
+  else {
     next()
   }
 }
 
-exports.movie = function (req, res, next) {
+exports.movie = function (req, res) {
   movie.fetch(function (err, movies) {
     if (err) {
       res.render('error')
@@ -40,7 +43,7 @@ exports.movie = function (req, res, next) {
   })
 }
 
-exports.userlist = function (req, res, next) {
+exports.userlist = function (req, res) {
   User.fetch(function (err, users) {
     if (err) {
       res.render('error')
@@ -52,7 +55,7 @@ exports.userlist = function (req, res, next) {
   })
 }
 
-exports.update = function (req, res, next) {
+exports.update = function (req, res) {
   var id = req.params.id
   if (id) {
     movie.findById(id, function (err, Movie) {
@@ -71,7 +74,7 @@ exports.update = function (req, res, next) {
   }
 }
 
-exports.form = function (req, res, next) {
+exports.form = function (req, res) {
   Category.find({}, function (err, categories) {
     res.render('form', {
       title: '后台电影表单提交页面',
@@ -91,12 +94,12 @@ exports.form = function (req, res, next) {
   })
 }
 
-exports.new = function (req, res, next) {
+exports.new = function (req, res) {
   var id = req.body.movie._id
   var movieObj = req.body.movie
   var _movie
 
-  if(req.poster){
+  if (req.poster) {
     movieObj.poster = req.poster
   }
 
@@ -129,23 +132,26 @@ exports.new = function (req, res, next) {
       if (categoryId) {
         Category.findById(categoryId, function (err, category) {
           category.movies.push(movie._id)
-          category.save(function (err, category) {
+          category.save(function (err) {
+            if (err) {
+              console.log(err)
+            }
             res.redirect('/movie/' + movie._id)
           })
         })
       }
-      else if(categoryName){
+      else if (categoryName) {
         var category = new Category({
           name: categoryName,
-          movies:[movie._id]
+          movies: [movie._id]
         })
 
-        category.save(function(err, category){
+        category.save(function (err, category) {
           movie.category = category._id
-          movie.save(function(err, movie){
-              res.redirect('/movie/' + movie._id)
+          movie.save(function (err, movie) {
+            res.redirect('/movie/' + movie._id)
           }
-        )
+          )
         })
       }
     })
@@ -155,7 +161,7 @@ exports.new = function (req, res, next) {
 exports.delete = function (req, res) {
   var id = req.query.id
   if (id) {
-    movie.remove({ _id: id }, function (err, Movie) {
+    movie.remove({ _id: id }, function (err) {
       if (err) {
         console.log(err)
         return
@@ -171,7 +177,7 @@ exports.delete = function (req, res) {
 exports.adminRequired = function (req, res, next) {
   var user = req.session.user
   if (user.role < 10) {
-    console.log("没有管理员权限")
+    console.log('没有管理员权限')
     res.redirect('/')
   }
   next()

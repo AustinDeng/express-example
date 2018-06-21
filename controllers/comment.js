@@ -1,6 +1,6 @@
 var Comment = require('../modules/comment')
 
-exports.save = function (req, res, next) {
+exports.save = function (req, res) {
   var _comment = req.body.comment
   var movieId = _comment.movie
 
@@ -14,7 +14,7 @@ exports.save = function (req, res, next) {
 
       comment.reply.push(reply)
 
-      comment.save(function (err, comment) {
+      comment.save(function (err) {
         if (err) {
           console.log(err)
         }
@@ -25,7 +25,7 @@ exports.save = function (req, res, next) {
   } else {
     var comment = new Comment(_comment)
 
-    comment.save(function (err, comment) {
+    comment.save(function (err) {
       if (err) {
         console.log(err)
       }

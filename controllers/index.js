@@ -55,8 +55,9 @@ exports.Search = function (req, res) {
   var cateId = req.query.cate
   var page = parseInt(req.query.p, 10) || 0
   var index = page * COUNT
-  var q = req.query.q
+  var q = req.query.q  // 取得关键字查询
 
+  // 分类查询，返回分类后的电影
   if (cateId) {
     Category
       .find({ _id: cateId })
@@ -82,6 +83,7 @@ exports.Search = function (req, res) {
         })
       })
   }
+  // 关键字查询电影
   else{
     movie
       .find({title: new RegExp(q + '.*', 'i')})
